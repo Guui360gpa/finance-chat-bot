@@ -1,3 +1,10 @@
+# Segredos locais
+.env
+
+# IDE
+.idea/
+*.iml
+
 # Compiled class file
 *.class
 
