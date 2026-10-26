@@ -1,4 +1,4 @@
-package br.com.guilherme.finance_chat_bot;
+package br.com.guilherme.financebot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

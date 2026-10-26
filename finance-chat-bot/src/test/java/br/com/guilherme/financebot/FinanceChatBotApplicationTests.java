@@ -1,4 +1,4 @@
-package br.com.guilherme.finance_chat_bot;
+package br.com.guilherme.financebot;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
