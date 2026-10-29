@@ -2,6 +2,7 @@ package br.com.guilherme.financebot.adapter.in.telegram;
 
 import br.com.guilherme.financebot.adapter.in.telegram.dto.Update;
 import jakarta.annotation.PreDestroy;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -9,13 +10,12 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Component
 @ConditionalOnProperty(prefix = "app.telegram", name = "polling-enabled", havingValue = "true",matchIfMissing = true)
 public class TelegramPoller {
 
-    private static final Logger log = (Logger) LoggerFactory.getLogger(TelegramPoller.class);
+    private static final Logger log = LoggerFactory.getLogger(TelegramPoller.class);
     private static final int TIMEOUT_LONG_POLLING_SEGUNDOS = 30;
 
     private final TelegramClient client;
@@ -59,7 +59,7 @@ public class TelegramPoller {
                     break;
                 }
 
-                log.warning("Falha no polling: " + ex.getClass().getSimpleName());
+                log.warn("Falha no polling: {}", ex.getClass().getSimpleName());
                 esperar(5000);
             }
 
