@@ -153,6 +153,21 @@ public class DinheiroTest {
         }
     }
 
+    @Nested
+    @DisplayName("Arredondamento (HALF_UP, 2 casas)")
+    class Arredondamento {
 
-
+        @ParameterizedTest(name = "{0} -> {1}")
+        @CsvSource({
+                "10.004, 10.00",
+                "10.005, 10.01",
+                "10.015, 10.02",
+                "10.994, 10.99",
+                "10.995, 11.00",
+                "-10.005, -10.01"
+        })
+        void arredondaParaDuasCasas(String entrada, String esperado) {
+            assertThat(Dinheiro.de(entrada)).isEqualTo(Dinheiro.de(esperado));
+        }
+    }
 }
