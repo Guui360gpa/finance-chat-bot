@@ -57,7 +57,21 @@ public class DinheiroTest {
         }
     }
 
+    @Nested
+    @DisplayName("Igualdade")
+    class Igualdade {
 
+        @Test
+        void escalasDiferentesSaoIguais() {
+            assertThat(Dinheiro.de("45")).isEqualTo(Dinheiro.de("45.00"));
+            assertThat(Dinheiro.de("45").hashCode()).isEqualTo(Dinheiro.de("45.00").hashCode());
+        }
+
+        @Test
+        void valoresDiferentesNaoSaoIguais() {
+            assertThat(Dinheiro.de("45.00")).isNotEqualTo(Dinheiro.de("45.01"));
+        }
+    }
 
 
 
