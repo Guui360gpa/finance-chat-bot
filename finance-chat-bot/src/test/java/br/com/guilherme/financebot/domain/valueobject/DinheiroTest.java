@@ -190,4 +190,32 @@ public class DinheiroTest {
             assertThat(Dinheiro.de(entrada.trim()).formatar()).isEqualTo(esperado.trim());
         }
     }
+
+    @Nested
+    @DisplayName("Formato brasileiro: entrada")
+    class ParseBrasileiro {
+
+        @ParameterizedTest(name = "\"{0}\" -> {1}")
+        @CsvSource(delimiter = '|', value = {
+                "45          | 45.00",
+                "23,50       | 23.50",
+                "1200,5      | 1200.50",
+                "1.200       | 1200.00",
+                "1.200,50    | 1200.50",
+                "1.234.567,89| 1234567.89",
+                "R$ 1.200    | 1200.00",
+                "R$1.200,50  | 1200.50",
+                "r$ 89,90    | 89.90"
+        })
+        void interpretaTextoBrasileiro(String entrada, String esperado) {
+            assertThat(Dinheiro.deTextoBr(entrada.trim())).isEqualTo(Dinheiro.de(esperado.trim()));
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"", "abc", "1.5", "1.2000", "12,345", "1,2,3", "R$", "-"})
+        void rejeitaTextoInvalido(String entrada) {
+            assertThatThrownBy(() -> Dinheiro.deTextoBr(entrada))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+    }
 }
