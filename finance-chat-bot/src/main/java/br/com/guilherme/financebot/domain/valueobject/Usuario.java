@@ -31,7 +31,7 @@ public final class Usuario {
         return new Usuario(null,telegramId,nome,FUSO_PADRAO,agora);
     }
 
-    public static Usuario reconstruir(Long id, long telegramId, String nome, ZoneId fusoHorario, Instant criadoEm) {
+    public static Usuario reconstituir(Long id, long telegramId, String nome, ZoneId fusoHorario, Instant criadoEm) {
         return new Usuario(Objects.requireNonNull(id,"id não pode ser nulo"),telegramId,nome,fusoHorario,criadoEm);
     }
 
