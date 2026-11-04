@@ -170,4 +170,24 @@ public class DinheiroTest {
             assertThat(Dinheiro.de(entrada)).isEqualTo(Dinheiro.de(esperado));
         }
     }
+
+    @Nested
+    @DisplayName("Formato brasileiro: saída")
+    class Formatacao {
+
+        @ParameterizedTest(name = "{0} -> {1}")
+        @CsvSource(delimiter = '|', value = {
+                "1200.50    | R$ 1.200,50",
+                "45         | R$ 45,00",
+                "0          | R$ 0,00",
+                "0.5        | R$ 0,50",
+                "999.99     | R$ 999,99",
+                "1000       | R$ 1.000,00",
+                "1234567.89 | R$ 1.234.567,89",
+                "-500       | -R$ 500,00"
+        })
+        void formataEmReais(String entrada, String esperado) {
+            assertThat(Dinheiro.de(entrada.trim()).formatar()).isEqualTo(esperado.trim());
+        }
+    }
 }
