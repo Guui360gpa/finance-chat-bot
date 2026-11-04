@@ -119,6 +119,40 @@ public class DinheiroTest {
         }
     }
 
+    @Nested
+    @DisplayName("Comparação")
+    class Comparacao {
+
+        @Test
+        void maiorEMenor() {
+            Dinheiro cinco = Dinheiro.de("5.00");
+            Dinheiro dez = Dinheiro.de("10.00");
+
+            assertThat(dez.ehMaiorQue(cinco)).isTrue();
+            assertThat(cinco.ehMaiorQue(dez)).isFalse();
+            assertThat(cinco.ehMenorQue(dez)).isTrue();
+            assertThat(dez.ehMenorQue(cinco)).isFalse();
+        }
+
+        @Test
+        void valoresIguaisNaoSaoMaioresNemMenores() {
+            Dinheiro a = Dinheiro.de("10.00");
+            Dinheiro b = Dinheiro.de("10");
+
+            assertThat(a.ehMaiorQue(b)).isFalse();
+            assertThat(a.ehMenorQue(b)).isFalse();
+            assertThat(a.compareTo(b)).isZero();
+        }
+
+        @Test
+        void sinais() {
+            assertThat(Dinheiro.de("1.00").ehPositivo()).isTrue();
+            assertThat(Dinheiro.de("-1.00").ehNegativo()).isTrue();
+            assertThat(Dinheiro.zero().ehPositivo()).isFalse();
+            assertThat(Dinheiro.zero().ehNegativo()).isFalse();
+        }
+    }
+
 
 
 }
