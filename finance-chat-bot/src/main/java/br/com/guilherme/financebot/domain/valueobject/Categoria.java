@@ -9,14 +9,22 @@ public final class Categoria {
 
    private static final int NOME_MAX = 50;
 
-   private final Long id;
-   private final Long usuarioId;
+    private final Long id;
+    private final Long usuarioId;
    private final String nome;
 
     public Categoria(Long id, Long usuarioId, String nome) {
         this.id = id;
         this.usuarioId = Objects.requireNonNull(usuarioId,"usuarioId não pode ser nulo");
         this.nome = validarNome(nome);
+    }
+
+    public static Categoria nova(Long usuarioId, String nome) {
+        return new Categoria(null,usuarioId,nome);
+    }
+
+    public static Categoria reconstruir(Long id,Long usuarioId, String nome) {
+        return new Categoria(Objects.requireNonNull(id,"id não pode ser nulo"),usuarioId,nome);
     }
 
     private String validarNome(String nome) {
