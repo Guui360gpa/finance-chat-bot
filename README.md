@@ -11,7 +11,7 @@
 ![Custo](https://img.shields.io/badge/Custo-zero-brightgreen?style=for-the-badge)
 ![Licença](https://img.shields.io/badge/Licen%C3%A7a-MIT-blue?style=for-the-badge)
 
-<img src="docs/images/mockup-registro.svg" alt="Conversa com o Finance Chat Bot registrando gastos" width="320">
+<img src="docs/mockup-registro.svg" alt="Conversa com o Finance Chat Bot registrando gastos" width="320">
 
 </div>
 
