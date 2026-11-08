@@ -72,7 +72,7 @@ Se o bot não souber a categoria, ele pergunta uma vez, com botões. A resposta 
 Todo dia 1, você recebe o retrato do mês: quanto entrou, quanto saiu, onde o dinheiro foi e como ficou em relação ao orçamento.
 
 <div align="center">
-<img src="docs/images/mockup-relatorio.svg" alt="Relatório mensal automático e comando de resumo" width="340">
+<img src="docs/mockup-relatorio.svg" alt="Relatório mensal automático e comando de resumo" width="340">
 </div>
 
 ## Por que isso importa
