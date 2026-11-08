@@ -56,7 +56,7 @@ Pronto. O bot entende, guarda, coloca na categoria certa e responde mostrando co
 Cada mensagem recebe uma resposta clara. Quando o orçamento da categoria está perto do limite, o bot avisa na própria confirmação.
 
 <div align="center">
-<img src="docs/images/mockup-registro.svg" alt="Registro de despesas e receitas por mensagem" width="340">
+<img src="docs/mockup-registro.svg" alt="Registro de despesas e receitas por mensagem" width="340">
 </div>
 
 ### Um bot que aprende com você
@@ -64,7 +64,7 @@ Cada mensagem recebe uma resposta clara. Quando o orçamento da categoria está 
 Se o bot não souber a categoria, ele pergunta uma vez, com botões. A resposta vira regra, e na próxima vez ele já sabe.
 
 <div align="center">
-<img src="docs/images/mockup-categoria.svg" alt="Bot perguntando a categoria com botões e aprendendo a resposta" width="340">
+<img src="docs/mockup-categoria.svg" alt="Bot perguntando a categoria com botões e aprendendo a resposta" width="340">
 </div>
 
 ### O relatório que chega sozinho
