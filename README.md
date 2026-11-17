@@ -11,7 +11,7 @@
 ![Custo](https://img.shields.io/badge/Custo-zero-brightgreen?style=for-the-badge)
 ![Licença](https://img.shields.io/badge/Licen%C3%A7a-MIT-blue?style=for-the-badge)
 
-<img src="docs/images/mockup-registro.svg" alt="Conversa com o Finance Chat Bot registrando gastos" width="320">
+<img src="docs/mockup-registro.svg" alt="Conversa com o Finance Chat Bot registrando gastos" width="320">
 
 </div>
 
@@ -56,7 +56,7 @@ Pronto. O bot entende, guarda, coloca na categoria certa e responde mostrando co
 Cada mensagem recebe uma resposta clara. Quando o orçamento da categoria está perto do limite, o bot avisa na própria confirmação.
 
 <div align="center">
-<img src="docs/images/mockup-registro.svg" alt="Registro de despesas e receitas por mensagem" width="340">
+<img src="docs/mockup-registro.svg" alt="Registro de despesas e receitas por mensagem" width="340">
 </div>
 
 ### Um bot que aprende com você
@@ -64,7 +64,7 @@ Cada mensagem recebe uma resposta clara. Quando o orçamento da categoria está 
 Se o bot não souber a categoria, ele pergunta uma vez, com botões. A resposta vira regra, e na próxima vez ele já sabe.
 
 <div align="center">
-<img src="docs/images/mockup-categoria.svg" alt="Bot perguntando a categoria com botões e aprendendo a resposta" width="340">
+<img src="docs/mockup-categoria.svg" alt="Bot perguntando a categoria com botões e aprendendo a resposta" width="340">
 </div>
 
 ### O relatório que chega sozinho
@@ -72,7 +72,7 @@ Se o bot não souber a categoria, ele pergunta uma vez, com botões. A resposta 
 Todo dia 1, você recebe o retrato do mês: quanto entrou, quanto saiu, onde o dinheiro foi e como ficou em relação ao orçamento.
 
 <div align="center">
-<img src="docs/images/mockup-relatorio.svg" alt="Relatório mensal automático e comando de resumo" width="340">
+<img src="docs/mockup-relatorio.svg" alt="Relatório mensal automático e comando de resumo" width="340">
 </div>
 
 ## Por que isso importa
