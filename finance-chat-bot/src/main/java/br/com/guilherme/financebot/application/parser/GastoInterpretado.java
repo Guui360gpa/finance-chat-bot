@@ -6,6 +6,11 @@ import br.com.guilherme.financebot.domain.valueobject.TipoTransacao;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Despesa ou receita extraída de um texto livre.
+ * A data é a data local do usuário (já resolvida: "ontem" vira hoje - 1).
+ */
+
 public record GastoInterpretado(
         TipoTransacao tipo,
         Dinheiro valor,
