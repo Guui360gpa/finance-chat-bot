@@ -1,5 +1,6 @@
 package br.com.guilherme.financebot.domain.valueobject;
 
+import br.com.guilherme.financebot.adapter.out.persistence.TransacaoEntity;
 import lombok.Getter;
 
 import java.time.Instant;
@@ -34,6 +35,21 @@ public final class Transacao {
         this.criadaEm = Objects.requireNonNull(criadaEm, "criadaEm não pode ser nulo");
     }
 
+    public Transacao(TransacaoEntity e) {
+
+        this.id = Objects.requireNonNull(e.getId(), "id não pode ser nulo");
+        this.usuarioId = Objects.requireNonNull(e.getUsuarioId(), "usuarioId não pode ser nulo");
+        this.categoriaId = e.getCategoriaId();
+        this.tipo = Objects.requireNonNull(e.getTipo(), "tipo não pode ser nulo");
+        this.valor = validarValor(Dinheiro.de(e.getValor()));
+        this.descricao = normalizarDescricao(e.getDescricao());
+        this.ocorridaEm = Objects.requireNonNull(e.getOcorridaEm(), "ocorridaEm não pode ser nulo");
+        this.mensagemOriginal = e.getMensagemOriginal();
+        this.desfeitaEm = e.getDesfeitaEm();
+        this.criadaEm = e.getCriadaEm();
+
+    }
+
     public static Transacao registrar(Long usuarioId, TipoTransacao tipo, Dinheiro valor, String descricao, Instant ocorridaEm, String mensagemOriginal, Instant agora) {
 
         return new Transacao(null, usuarioId, null, tipo, valor, descricao, ocorridaEm,
@@ -45,6 +61,12 @@ public final class Transacao {
 
         return new Transacao(Objects.requireNonNull(id, "id não pode ser nulo"), usuarioId, categoriaId,
                 tipo, valor, descricao, ocorridaEm, mensagemOriginal, desfeitaEm, criadaEm);
+
+    }
+
+    public static Transacao reconstituir(TransacaoEntity e) {
+
+        return new Transacao(e);
 
     }
 
