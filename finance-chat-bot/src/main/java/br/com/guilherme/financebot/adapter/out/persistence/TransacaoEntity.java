@@ -56,8 +56,9 @@ public class TransacaoEntity {
 
     public TransacaoEntity() {}
 
-    public TransacaoEntity(Long id, Long usuarioId, Long categoriaId, TipoTransacao tipo, BigDecimal valor, String descricao,
-                           Instant ocorridaEm, String mensagemOriginal, Instant criadaEm) {
+    public TransacaoEntity(Long id, Long usuarioId, Long categoriaId, TipoTransacao tipo, BigDecimal valor,
+                           String descricao, Instant ocorridaEm, String mensagemOriginal,
+                           Instant desfeitaEm, Instant criadaEm) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.categoriaId = categoriaId;
@@ -66,6 +67,7 @@ public class TransacaoEntity {
         this.descricao = descricao;
         this.ocorridaEm = ocorridaEm;
         this.mensagemOriginal = mensagemOriginal;
+        this.desfeitaEm = desfeitaEm;
         this.criadaEm = criadaEm;
     }
 
