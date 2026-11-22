@@ -3,8 +3,8 @@ package br.com.guilherme.financebot.adapter.out.telegram;
 import br.com.guilherme.financebot.application.port.out.NotificacaoFalhouException;
 import br.com.guilherme.financebot.application.port.out.NotificadorPort;
 import br.com.guilherme.financebot.domain.valueobject.Usuario;
-import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ public class TelegramNotificador implements NotificadorPort {
 
     @Autowired
     public TelegramNotificador(RestClient.Builder builder,
-                               @Value("telegram.bot-token: ${TELEGRAM_BOT_TOKEN}") String botToken,
+                               @Value("${telegram.bot-token}") String botToken,
                                @Value("${telegram.api-base-url:https://api.telegram.org}") String apiBaseUrl) {
         this(montarRestClient(builder, apiBaseUrl, botToken), botToken);
     }
