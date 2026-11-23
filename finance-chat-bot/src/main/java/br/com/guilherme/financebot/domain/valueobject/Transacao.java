@@ -10,6 +10,7 @@ import java.util.Objects;
 public final class Transacao {
 
     private static final int DESCRICAO_MAX = 200;
+    public static final Dinheiro VALOR_MAXIMO = Dinheiro.de("9999999999.99");
 
     private final Long id; // null até ser persistida
     private final Long usuarioId;
