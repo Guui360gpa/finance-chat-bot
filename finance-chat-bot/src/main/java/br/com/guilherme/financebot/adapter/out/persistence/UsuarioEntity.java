@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.time.Instant;
 
+/** Representação da tabela "usuario" (migration V1). O fuso é guardado como texto (ex.: America/Sao_Paulo). */
 @Entity
 @Table(name = "usuario")
 @Getter
