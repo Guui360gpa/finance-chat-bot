@@ -2,9 +2,12 @@ package br.com.guilherme.financebot.adapter.out.persistence;
 
 import br.com.guilherme.financebot.application.port.out.UsuarioRepository;
 import br.com.guilherme.financebot.domain.valueobject.Usuario;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/** Adapter de saída: implementa a porta UsuarioRepository usando JPA. */
+@Repository
 public class UsuarioRepositoryAdapter implements UsuarioRepository {
 
     private final UsuarioJpaRepository jpa;
