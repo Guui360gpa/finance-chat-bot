@@ -13,7 +13,7 @@ public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "telegram_id", nullable = false, unique = true)
     private long telegramId;
@@ -29,7 +29,7 @@ public class UsuarioEntity {
 
     protected UsuarioEntity() {}
 
-    public UsuarioEntity(long id, long telegramId, String nome, String fusoHorario, Instant criadoEm) {
+    public UsuarioEntity(Long id, long telegramId, String nome, String fusoHorario, Instant criadoEm) {
         this.id = id;
         this.telegramId = telegramId;
         this.nome = nome;
