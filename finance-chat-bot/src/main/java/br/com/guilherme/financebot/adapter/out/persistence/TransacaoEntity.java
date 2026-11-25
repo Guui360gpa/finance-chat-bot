@@ -1,7 +1,7 @@
 package br.com.guilherme.financebot.adapter.out.persistence;
 
 import br.com.guilherme.financebot.domain.valueobject.TipoTransacao;
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
+import br.com.guilherme.financebot.domain.model.Transacao;
 import jakarta.persistence.*;
 import lombok.Getter;
 
