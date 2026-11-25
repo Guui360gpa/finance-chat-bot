@@ -3,16 +3,14 @@ package br.com.guilherme.financebot.config;
 import br.com.guilherme.financebot.application.parser.ComandoParser;
 import br.com.guilherme.financebot.application.parser.GastoRegexParser;
 import br.com.guilherme.financebot.application.parser.InterpretadorMensagem;
+import br.com.guilherme.financebot.application.port.in.ConsultarExtratoDoDiaUseCase;
 import br.com.guilherme.financebot.application.port.in.ProcessarMensagemUseCase;
 import br.com.guilherme.financebot.application.port.in.RegistrarTransacaoUseCase;
 import br.com.guilherme.financebot.application.port.out.NotificadorPort;
 import br.com.guilherme.financebot.application.port.out.TransacaoRepository;
 import br.com.guilherme.financebot.application.port.out.UpdateProcessadoRepository;
 import br.com.guilherme.financebot.application.port.out.UsuarioRepository;
-import br.com.guilherme.financebot.application.service.ObterOuCriarUsuario;
-import br.com.guilherme.financebot.application.service.ProcessarMensagemIdempotente;
-import br.com.guilherme.financebot.application.service.ProcessarMensagemService;
-import br.com.guilherme.financebot.application.service.RegistrarTransacaoService;
+import br.com.guilherme.financebot.application.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,22 +30,32 @@ import java.util.List;
 public class AplicacaoConfig {
 
     @Bean
-    public Clock clock() {
+    Clock clock() {
         return Clock.systemUTC();
     }
 
     @Bean
-    public RegistrarTransacaoUseCase registrarTransacaoUseCase(TransacaoRepository transacoes, NotificadorPort notificador, Clock clock) {
+    RegistrarTransacaoUseCase registrarTransacaoUseCase(TransacaoRepository transacoes,
+                                                        NotificadorPort notificador, Clock clock) {
         return new RegistrarTransacaoService(transacoes, notificador, clock);
     }
 
     @Bean
-    public ProcessarMensagemUseCase processarMensagemUseCase(UsuarioRepository usuarios, RegistrarTransacaoUseCase registrarTransacao, NotificadorPort notificador,
-                                                             UpdateProcessadoRepository updates, Clock clock) {
+    ConsultarExtratoDoDiaUseCase consultarExtratoDoDiaUseCase(TransacaoRepository transacoes) {
+        return new ConsultarExtratoDoDiaService(transacoes);
+    }
+
+    @Bean
+    ProcessarMensagemUseCase processarMensagemUseCase(UsuarioRepository usuarios,
+                                                      RegistrarTransacaoUseCase registrarTransacao,
+                                                      ConsultarExtratoDoDiaUseCase consultarExtratoDoDia,
+                                                      NotificadorPort notificador,
+                                                      UpdateProcessadoRepository updates,
+                                                      Clock clock) {
         var interpretador = new InterpretadorMensagem(List.of(new ComandoParser(), new GastoRegexParser()));
         var servico = new ProcessarMensagemService(
-                new ObterOuCriarUsuario(usuarios, clock), interpretador, registrarTransacao, notificador, clock);
-
+                new ObterOuCriarUsuario(usuarios, clock), interpretador, registrarTransacao,
+                consultarExtratoDoDia, notificador, clock);
         return new ProcessarMensagemTransacional(new ProcessarMensagemIdempotente(updates, servico));
     }
 

@@ -13,18 +13,20 @@ public class TransacaoRepositoryAdapter implements TransacaoRepository {
 
     private final TransacaoJpaRepository jpa;
 
-    public TransacaoRepositoryAdapter(TransacaoJpaRepository jpa) {
+    TransacaoRepositoryAdapter(TransacaoJpaRepository jpa) {
         this.jpa = jpa;
-    }
-
-    @Override
-    public List<Transacao> listarNoPeriodo(Long id, Instant inicio, Instant fim) {
-        return List.of();
     }
 
     @Override
     public Transacao salvar(Transacao transacao) {
         TransacaoEntity salva = jpa.save(TransacaoMapper.paraEntidade(transacao));
         return TransacaoMapper.paraDominio(salva);
+    }
+
+    @Override
+    public List<Transacao> listarNoPeriodo(Long usuarioId, Instant inicio, Instant fim) {
+        return jpa.buscarNoPeriodo(usuarioId, inicio, fim).stream()
+                .map(TransacaoMapper::paraDominio)
+                .toList();
     }
 }

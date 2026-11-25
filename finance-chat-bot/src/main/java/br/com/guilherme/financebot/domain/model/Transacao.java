@@ -15,7 +15,7 @@ public final class Transacao {
 
     private static final int DESCRICAO_MAX = 200;
     /** Maior valor que cabe em NUMERIC(12,2). Acima disso o banco recusaria o INSERT. */
-    private static final Dinheiro VALOR_MAXIMO = Dinheiro.de("9999999999.99");
+    public static final Dinheiro VALOR_MAXIMO = Dinheiro.de("9999999999.99");
 
     private final Long id; // null até ser persistida
     private final Long usuarioId;

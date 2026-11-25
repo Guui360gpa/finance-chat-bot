@@ -2,12 +2,10 @@ package br.com.guilherme.financebot.application.service;
 
 
 import br.com.guilherme.financebot.application.parser.*;
-import br.com.guilherme.financebot.application.port.in.MensagemRecebida;
-import br.com.guilherme.financebot.application.port.in.ProcessarMensagemUseCase;
-import br.com.guilherme.financebot.application.port.in.RegistrarTransacaoComando;
-import br.com.guilherme.financebot.application.port.in.RegistrarTransacaoUseCase;
+import br.com.guilherme.financebot.application.port.in.*;
 import br.com.guilherme.financebot.application.port.out.NotificacaoFalhouException;
 import br.com.guilherme.financebot.application.port.out.NotificadorPort;
+import br.com.guilherme.financebot.domain.model.Transacao;
 import br.com.guilherme.financebot.domain.valueobject.Usuario;
 
 import java.time.Clock;
@@ -29,16 +27,22 @@ public class ProcessarMensagemService implements ProcessarMensagemUseCase {
     private final ObterOuCriarUsuario obterOuCriarUsuario;
     private final InterpretadorMensagem interpretador;
     private final RegistrarTransacaoUseCase registrarTransacao;
+    private final ConsultarExtratoDoDiaUseCase consultarExtratoDoDia;
     private final NotificadorPort notificador;
     private final Clock clock;
 
-    public ProcessarMensagemService(ObterOuCriarUsuario obterOuCriarUsuario, InterpretadorMensagem interpretador, RegistrarTransacaoUseCase registrarTransacao,
-                                    NotificadorPort notificador, Clock clock) {
-        this.obterOuCriarUsuario = obterOuCriarUsuario;
-        this.interpretador = interpretador;
-        this.registrarTransacao = registrarTransacao;
-        this.notificador = notificador;
-        this.clock = clock;
+    public ProcessarMensagemService(ObterOuCriarUsuario obterOuCriarUsuario,
+                                    InterpretadorMensagem interpretador,
+                                    RegistrarTransacaoUseCase registrarTransacao,
+                                    ConsultarExtratoDoDiaUseCase consultarExtratoDoDia,
+                                    NotificadorPort notificador,
+                                    Clock clock) {
+        this.obterOuCriarUsuario = Objects.requireNonNull(obterOuCriarUsuario);
+        this.interpretador = Objects.requireNonNull(interpretador);
+        this.registrarTransacao = Objects.requireNonNull(registrarTransacao);
+        this.consultarExtratoDoDia = Objects.requireNonNull(consultarExtratoDoDia);
+        this.notificador = Objects.requireNonNull(notificador);
+        this.clock = Objects.requireNonNull(clock);
     }
 
     @Override
@@ -52,14 +56,14 @@ public class ProcessarMensagemService implements ProcessarMensagemUseCase {
         try {
             switch (interpretada) {
                 case GastoInterpretado gasto -> tratarGasto(usuario, mensagem, gasto);
-                case MensagemIncompleta incompleta -> notificador.notificar(usuario, Respostas.valorSemDescricao(incompleta.valor()));
-                case ComandoInterpretado comando -> tratarComando(usuario, comando);
+                case MensagemIncompleta incompleta ->
+                        notificador.notificar(usuario, Respostas.valorSemDescricao(incompleta.valor()));
+                case ComandoInterpretado comando -> tratarComando(usuario, comando, hoje);
                 case NaoReconhecida naoReconhecida -> notificador.notificar(usuario, Respostas.AJUDA);
             }
         } catch (NotificacaoFalhouException e) {
-            LOG.log(System.Logger.Level.WARNING, "Não foi possível notificar o usuário" + usuario.getId() + ": " + e.getMessage());
+            LOG.log(System.Logger.Level.WARNING, "Não foi possível notificar o usuário " + usuario.getId() + ": " + e.getMessage());
         }
-
     }
 
     private void tratarGasto(Usuario usuario, MensagemRecebida mensagem, GastoInterpretado gasto) {
@@ -71,10 +75,12 @@ public class ProcessarMensagemService implements ProcessarMensagemUseCase {
                 gasto.descricao(), gasto.data(), mensagem.texto()));
     }
 
-    private void tratarComando(Usuario usuario, ComandoInterpretado interpretado) {
+    private void tratarComando(Usuario usuario, ComandoInterpretado interpretado, LocalDate hoje) {
         switch (interpretado.comando()) {
             case AJUDA -> notificador.notificar(usuario, Respostas.AJUDA);
-            // /hoje chega na E1.11; os demais, nas Etapas 2 a 4.
+            case HOJE -> notificador.notificar(usuario,
+                    Respostas.extratoDoDia(hoje, consultarExtratoDoDia.consultar(usuario, hoje)));
+            // Os demais comandos chegam nas Etapas 2 a 4.
             default -> notificador.notificar(usuario, Respostas.COMANDO_INDISPONIVEL);
         }
     }

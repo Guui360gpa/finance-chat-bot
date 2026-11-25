@@ -6,6 +6,7 @@ import br.com.guilherme.financebot.application.parser.InterpretadorMensagem;
 import br.com.guilherme.financebot.application.port.in.MensagemRecebida;
 import br.com.guilherme.financebot.application.port.out.NotificacaoFalhouException;
 import br.com.guilherme.financebot.application.port.out.NotificadorPort;
+import br.com.guilherme.financebot.domain.model.Transacao;
 import br.com.guilherme.financebot.domain.valueobject.Dinheiro;
 import br.com.guilherme.financebot.domain.valueobject.TipoTransacao;
 import br.com.guilherme.financebot.testsupport.NotificadorFalso;
@@ -23,25 +24,25 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 class ProcessarMensagemServiceTest {
 
-    private static final String MEIO_DIA_EM_SP = "2026-03-01T15:00:00Z";
+    private static final String MEIO_DIA_EM_SP = "2026-03-01T15:00:00Z"; // 12:00 em São Paulo
 
     private final UsuarioRepositoryEmMemoria usuarios = new UsuarioRepositoryEmMemoria();
     private final TransacaoRepositoryEmMemoria transacoes = new TransacaoRepositoryEmMemoria();
     private final NotificadorFalso notificador = new NotificadorFalso();
 
-    private ProcessarMensagemService servico(String instance) {
-        return servico(instance, notificador);
+    private ProcessarMensagemService servico(String instante) {
+        return servico(instante, notificador);
     }
 
-    private ProcessarMensagemService servico(String instance, NotificadorPort canal) {
-        Clock clock = Clock.fixed(Instant.parse(instance), ZoneOffset.UTC);
+    private ProcessarMensagemService servico(String instante, NotificadorPort canal) {
+        Clock clock = Clock.fixed(Instant.parse(instante), ZoneOffset.UTC);
         return new ProcessarMensagemService(
                 new ObterOuCriarUsuario(usuarios, clock),
                 new InterpretadorMensagem(List.of(new ComandoParser(), new GastoRegexParser())),
                 new RegistrarTransacaoService(transacoes, canal, clock),
+                new ConsultarExtratoDoDiaService(transacoes),
                 canal,
-                clock
-        );
+                clock);
     }
 
     private MensagemRecebida mensagem(String texto) {
@@ -50,11 +51,11 @@ class ProcessarMensagemServiceTest {
 
     private String ultimaResposta() {
         List<NotificadorFalso.Envio> enviados = notificador.enviados();
-        return enviados.getLast().mensagem();
+        return enviados.get(enviados.size() - 1).mensagem();
     }
 
     @Test
-    public void primeiroContatoCriaOuUsuarioRegistraOGasto() {
+    void primeiroContatoCriaOUsuarioERegistraOGasto() {
         servico(MEIO_DIA_EM_SP).processar(mensagem("gastei 45 no mercado"));
 
         assertThat(usuarios.total()).isEqualTo(1);
@@ -66,12 +67,11 @@ class ProcessarMensagemServiceTest {
             assertThat(t.getDescricao()).isEqualTo("mercado");
             assertThat(t.getMensagemOriginal()).isEqualTo("gastei 45 no mercado");
         });
-
         assertThat(ultimaResposta()).isEqualTo("Despesa registrada: R$ 45,00 (mercado) em 01/03/2026.");
     }
 
     @Test
-    public void mensagensSeguintesReaproveitamOUsario() {
+    void mensagensSeguintesReaproveitamOUsuario() {
         var servico = servico(MEIO_DIA_EM_SP);
 
         servico.processar(mensagem("gastei 45 no mercado"));
@@ -83,7 +83,7 @@ class ProcessarMensagemServiceTest {
     }
 
     @Test
-    public void registraReceitaQuandoHaVerboDeReceita() {
+    void registraReceitaQuandoHaVerboDeReceita() {
         servico(MEIO_DIA_EM_SP).processar(mensagem("recebi 3000 salário"));
 
         assertThat(transacoes.todas()).singleElement()
@@ -141,6 +141,42 @@ class ProcessarMensagemServiceTest {
     }
 
     @Test
+    void comandoHojeMostraAsTransacoesDoDiaComTotais() {
+        var servico = servico(MEIO_DIA_EM_SP);
+        servico.processar(mensagem("gastei 45 no mercado"));
+        servico.processar(mensagem("recebi 3000 salário"));
+
+        servico.processar(mensagem("/hoje"));
+
+        assertThat(ultimaResposta()).isEqualTo(
+                "Hoje (01/03/2026):\n"
+                        + "- Despesa: R$ 45,00 (mercado)\n"
+                        + "- Receita: R$ 3.000,00 (salário)\n"
+                        + "\n"
+                        + "Receitas: R$ 3.000,00\n"
+                        + "Despesas: R$ 45,00\n"
+                        + "Saldo: R$ 2.955,00");
+    }
+
+    @Test
+    void comandoHojeSemTransacoesAvisaQueEstaVazio() {
+        servico(MEIO_DIA_EM_SP).processar(mensagem("/hoje"));
+
+        assertThat(ultimaResposta()).isEqualTo("Nenhuma transação registrada hoje (01/03/2026).");
+    }
+
+    @Test
+    void hojeRespeitaOFusoDoUsuario() {
+        // 02:00Z ainda é 28/02 em São Paulo; duas horas depois (04:00Z) já é 01/03 lá.
+        servico("2026-03-01T02:00:00Z").processar(mensagem("gastei 45 no mercado"));
+
+        servico("2026-03-01T04:00:00Z").processar(mensagem("/hoje"));
+
+        // Pela data em UTC os dois momentos são 01/03; pelo fuso do usuário, o gasto é de ontem.
+        assertThat(ultimaResposta()).isEqualTo("Nenhuma transação registrada hoje (01/03/2026).");
+    }
+
+    @Test
     void falhaAoNotificarNaoDerrubaOProcessamentoNemPerdeOGasto() {
         NotificadorPort telegramFora = (usuario, texto) -> {
             throw new NotificacaoFalhouException("telegram fora");
@@ -150,7 +186,4 @@ class ProcessarMensagemServiceTest {
                 .doesNotThrowAnyException();
         assertThat(transacoes.todas()).hasSize(1);
     }
-
-
-
 }
