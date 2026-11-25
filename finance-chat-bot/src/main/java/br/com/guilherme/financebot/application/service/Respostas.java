@@ -1,7 +1,6 @@
 package br.com.guilherme.financebot.application.service;
 
 import br.com.guilherme.financebot.domain.valueobject.Dinheiro;
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
 
 public final class Respostas {
 

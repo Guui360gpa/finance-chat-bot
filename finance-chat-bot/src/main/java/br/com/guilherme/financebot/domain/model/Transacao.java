@@ -1,6 +1,7 @@
 package br.com.guilherme.financebot.domain.model;
 
 
+import br.com.guilherme.financebot.adapter.out.persistence.TransacaoEntity;
 import br.com.guilherme.financebot.domain.valueobject.Dinheiro;
 import br.com.guilherme.financebot.domain.valueobject.TipoTransacao;
 import lombok.Getter;
@@ -27,19 +28,32 @@ public final class Transacao {
     private Instant desfeitaEm;
     private final Instant criadaEm;
 
-    private Transacao(Long id, Long usuarioId, Long categoriaId, TipoTransacao tipo, Dinheiro valor,
-                      String descricao, Instant ocorridaEm, String mensagemOriginal,
-                      Instant desfeitaEm, Instant criadaEm) {
+    public Transacao(Long id, Long usuarioId, Long categoriaId, TipoTransacao tipo, Dinheiro valor, String descricao, Instant ocorridaEm, String mensagemOriginal, Instant desfeitaEm, Instant criadaEm) {
         this.id = id;
-        this.usuarioId = Objects.requireNonNull(usuarioId, "usuarioId não pode ser nulo");
+        this.usuarioId = Objects.requireNonNull(usuarioId,"id não pode ser nulo");
         this.categoriaId = categoriaId;
-        this.tipo = Objects.requireNonNull(tipo, "tipo não pode ser nulo");
+        this.tipo = Objects.requireNonNull(tipo,"tipo não pode ser nulo");
         this.valor = validarValor(valor);
         this.descricao = normalizarDescricao(descricao);
         this.ocorridaEm = Objects.requireNonNull(ocorridaEm, "ocorridaEm não pode ser nulo");
         this.mensagemOriginal = mensagemOriginal;
         this.desfeitaEm = desfeitaEm;
         this.criadaEm = Objects.requireNonNull(criadaEm, "criadaEm não pode ser nulo");
+    }
+
+    public Transacao(TransacaoEntity e) {
+
+        this.id = Objects.requireNonNull(e.getId(), "id não pode ser nulo");
+        this.usuarioId = Objects.requireNonNull(e.getUsuarioId(), "usuarioId não pode ser nulo");
+        this.categoriaId = e.getCategoriaId();
+        this.tipo = Objects.requireNonNull(e.getTipo(), "tipo não pode ser nulo");
+        this.valor = validarValor(Dinheiro.de(e.getValor()));
+        this.descricao = normalizarDescricao(e.getDescricao());
+        this.ocorridaEm = Objects.requireNonNull(e.getOcorridaEm(), "ocorridaEm não pode ser nulo");
+        this.mensagemOriginal = e.getMensagemOriginal();
+        this.desfeitaEm = e.getDesfeitaEm();
+        this.criadaEm = e.getCriadaEm();
+
     }
 
     /** Nova transação, sem id e sem categoria (a categorização vem depois). */

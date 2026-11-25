@@ -4,7 +4,7 @@ import br.com.guilherme.financebot.application.port.in.RegistrarTransacaoComando
 import br.com.guilherme.financebot.application.port.in.RegistrarTransacaoUseCase;
 import br.com.guilherme.financebot.application.port.out.NotificadorPort;
 import br.com.guilherme.financebot.application.port.out.TransacaoRepository;
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
+import br.com.guilherme.financebot.domain.model.Transacao;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;

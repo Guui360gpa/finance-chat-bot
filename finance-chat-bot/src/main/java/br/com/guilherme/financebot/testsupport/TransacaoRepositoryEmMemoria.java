@@ -2,8 +2,9 @@ package br.com.guilherme.financebot.testsupport;
 
 
 import br.com.guilherme.financebot.application.port.out.TransacaoRepository;
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
+import br.com.guilherme.financebot.domain.model.Transacao;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,6 +23,11 @@ public class TransacaoRepositoryEmMemoria implements TransacaoRepository {
                 t.getDesfeitaEm(),t.getCriadaEm());
         salvas.add(salva);
         return salva;
+    }
+
+    @Override
+    public List<Transacao> listarNoPeriodo(Long id, Instant inicio, Instant fim) {
+        return List.of();
     }
 
     public List<Transacao> todas() {

@@ -1,5 +1,6 @@
 package br.com.guilherme.financebot.domain.valueobject;
 
+import br.com.guilherme.financebot.domain.model.Transacao;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;

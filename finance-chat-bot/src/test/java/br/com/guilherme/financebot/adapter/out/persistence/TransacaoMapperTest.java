@@ -1,8 +1,8 @@
 package br.com.guilherme.financebot.adapter.out.persistence;
 
+import br.com.guilherme.financebot.domain.model.Transacao;
 import br.com.guilherme.financebot.domain.valueobject.Dinheiro;
 import br.com.guilherme.financebot.domain.valueobject.TipoTransacao;
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

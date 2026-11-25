@@ -8,7 +8,6 @@ import br.com.guilherme.financebot.application.port.in.RegistrarTransacaoComando
 import br.com.guilherme.financebot.application.port.in.RegistrarTransacaoUseCase;
 import br.com.guilherme.financebot.application.port.out.NotificacaoFalhouException;
 import br.com.guilherme.financebot.application.port.out.NotificadorPort;
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
 import br.com.guilherme.financebot.domain.valueobject.Usuario;
 
 import java.time.Clock;

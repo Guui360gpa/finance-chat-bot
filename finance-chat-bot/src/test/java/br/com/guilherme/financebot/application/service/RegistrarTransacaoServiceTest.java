@@ -3,9 +3,9 @@ package br.com.guilherme.financebot.application.service;
 import br.com.guilherme.financebot.application.port.in.RegistrarTransacaoComando;
 import br.com.guilherme.financebot.application.port.out.NotificadorPort;
 import br.com.guilherme.financebot.application.port.out.TransacaoRepository;
+import br.com.guilherme.financebot.domain.model.Transacao;
 import br.com.guilherme.financebot.domain.valueobject.Dinheiro;
 import br.com.guilherme.financebot.domain.valueobject.TipoTransacao;
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
 import br.com.guilherme.financebot.domain.valueobject.Usuario;
 import br.com.guilherme.financebot.testsupport.NotificadorFalso;
 import br.com.guilherme.financebot.testsupport.TransacaoRepositoryEmMemoria;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -147,8 +148,16 @@ class RegistrarTransacaoServiceTest {
 
         @Test
         void falhaAoSalvarNaoNotificaOUsuario() {
-            TransacaoRepository bancoFora = transacao -> {
-                throw new IllegalStateException("banco fora");
+            TransacaoRepository bancoFora = new TransacaoRepository() {
+                @Override
+                public Transacao salvar(Transacao transacao) {
+                    throw new IllegalStateException("banco fora");
+                }
+
+                @Override
+                public List<Transacao> listarNoPeriodo(Long usuarioId, Instant inicio, Instant fim) {
+                    throw new IllegalStateException("banco fora");
+                }
             };
             var servico = new RegistrarTransacaoService(bancoFora, notificador,
                     Clock.fixed(Instant.parse(MEIO_DIA_EM_SP), ZoneOffset.UTC));

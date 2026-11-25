@@ -8,7 +8,6 @@ import br.com.guilherme.financebot.application.port.out.NotificacaoFalhouExcepti
 import br.com.guilherme.financebot.application.port.out.NotificadorPort;
 import br.com.guilherme.financebot.domain.valueobject.Dinheiro;
 import br.com.guilherme.financebot.domain.valueobject.TipoTransacao;
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
 import br.com.guilherme.financebot.testsupport.NotificadorFalso;
 import br.com.guilherme.financebot.testsupport.TransacaoRepositoryEmMemoria;
 import br.com.guilherme.financebot.testsupport.UsuarioRepositoryEmMemoria;

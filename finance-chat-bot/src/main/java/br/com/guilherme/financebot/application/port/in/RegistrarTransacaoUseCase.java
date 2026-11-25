@@ -1,6 +1,7 @@
 package br.com.guilherme.financebot.application.port.in;
 
-import br.com.guilherme.financebot.domain.valueobject.Transacao;
+
+import br.com.guilherme.financebot.domain.model.Transacao;
 
 /** Porta de entrada: o que a aplicação oferece para registrar uma despesa ou receita. */
 public interface RegistrarTransacaoUseCase {
